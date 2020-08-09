@@ -67,6 +67,7 @@ export default function Form() {
   const [formData, setFormData] = useState(initialFields)
   const [programmingLanguage, setProgrammingLanguage] = useState("")
   const [technology, setTechnology] = useState("")
+  const [isLoading, setIsLoading] = useState(false)
   // const [programingLanguages, setLanguages] = useState([])
   const selectProgramingLanguage = (event) => {
     setFormData({
@@ -91,6 +92,7 @@ export default function Form() {
   }
   const onSubmit = (e) => {
     e.preventDefault()
+    setIsLoading(true)
     fetch("/form/create", {
       method: "POST",
       headers: {
@@ -102,6 +104,7 @@ export default function Form() {
       .then(() => {
         setFormData(initialFields)
       })
+      .finally(() => setIsLoading(false))
   }
   const onLanguageInput = (val, index) => {
     const data = copy(formData)
@@ -471,7 +474,12 @@ export default function Form() {
             </fieldset>
           </Grid>
           <Grid justify="center" container>
-            <Button variant="contained" color="primary" type="submit">
+            <Button
+              variant="contained"
+              color="primary"
+              type="submit"
+              disabled={isLoading}
+            >
               Submit
             </Button>
           </Grid>
